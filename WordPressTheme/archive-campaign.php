@@ -64,7 +64,16 @@
                   }
                 ?>
                 </span>
-                <h3 class="campaign-card__title campaign-card__title--big "><?php the_title(); ?></h3>
+                <h3 class="campaign-card__title campaign-card__title--big ">
+					<?php
+    $title = get_the_title();
+    if(mb_strlen($title)>20) {
+        $title= mb_substr($title,0,20);
+        echo $title . '...';
+    } else {
+        echo $title;
+    }
+    ?></h3>
               </div>
               <div class="campaign-card__info campaign-card__info--campaign">
                 <div class="campaign-card__text">全部コミコミ(お一人様)</div>
@@ -73,9 +82,15 @@
                   <p class="campaign-card__pay-post">¥<?php the_field('price_down'); ?></p>
                 </div>
               </div>
-              <div class="campaign-card__sentence">
-              <?php the_field('campaign_text'); ?>
-              </div>
+<div class="campaign-card__sentence">
+    <?php 
+    $campaign_text = get_field('campaign_text');
+    $remove_array = ["\r\n", "\r", "\n", " ", "　"];
+    $content = wp_trim_words(strip_shortcodes($campaign_text), 66, '…' );
+    $content = str_replace($remove_array, '', $content);
+    echo $content;
+    ?>
+</div>
               <div class="campaign-card__contact">
                 <div class="campaign-card__period"><?php the_field('start'); ?>-<?php the_field('finish'); ?></div>
                 <p class="campaign-card__inquiry">ご予約・お問い合わせはコチラ</p>

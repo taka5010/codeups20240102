@@ -49,7 +49,15 @@
                     ?>
                     </p>
                   </div>
-                  <h3 class="voice-card__title"><?php the_title(); ?></h3>
+                  <h3 class="voice-card__title"><?php
+    $title = get_the_title();
+    if(mb_strlen($title)>20) {
+        $title= mb_substr($title,0,20);
+        echo $title . '...';
+    } else {
+        echo $title;
+    }
+    ?></h3>
                 </div>
                 <div class="voice-card__headerRight">
                   <figure class="voice-card__img js-inview">
@@ -64,7 +72,13 @@
               <div class="voice-card__body">
                 <div class="voice-card__info">
                   <p class="voice-card__text">
-                    <?php the_field('voice_2'); ?>
+					      <?php 
+    $campaign_text = get_field('voice_2');
+    $remove_array = ["\r\n", "\r", "\n", " ", "　"];
+    $content = wp_trim_words(strip_shortcodes($campaign_text), 66, '…' );
+    $content = str_replace($remove_array, '', $content);
+    echo $content;
+    ?>
                   </p>
                 </div>
               </div>
