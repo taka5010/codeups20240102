@@ -33,6 +33,10 @@ function my_custom_post_count($query) {
       if (is_page('your_page_slug')) {
           $query->set('posts_per_page', 10); // 表示する記事数を指定
       }
+	        // 管理画面の場合
+      if (is_admin()) {
+          $query->set('posts_per_page', 10); // 表示する記事数を指定
+      }
   }
 }
 add_action('pre_get_posts', 'my_custom_post_count');
