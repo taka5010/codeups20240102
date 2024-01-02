@@ -125,7 +125,7 @@
         </div>
       </div>
       <div class="campaign__btn">
-        <a href="https://taka-webdesign.main.jp/newcodeups/campaign.html" class="button"><span class="button__text">view more</span><span class="button__arrow"></span></a>
+        <a href="<?php echo home_url('/campaign'); ?>" class="button"><span class="button__text">view more</span><span class="button__arrow"></span></a>
       </div>
     </section>
     <section class="about top-about">

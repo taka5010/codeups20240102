@@ -78,7 +78,14 @@
                   </figure>
                 <div class="reputation-card__body">
                   <span class="reputation-card__category"><?php the_field('voice_1'); ?></span>
-                  <div class="reputation-card__text"><?php the_title(); ?></div>
+                  <div class="reputation-card__text"><?php
+if(mb_strlen($post->post_title)>20) {
+  $title= mb_substr($post->post_title,0,20) ;
+    echo $title . '...';
+  } else {
+    echo $post->post_title;
+  }
+?></div>
                 </div>
               </div>
 							<!-- ループ終了 -->
@@ -132,7 +139,14 @@
                       }
                     ?>
                     </span>
-                    <h3 class="campaign-card__title campaign-card__title--big "><?php the_title(); ?></h3>
+                    <h3 class="campaign-card__title campaign-card__title--big "><?php
+if(mb_strlen($post->post_title)>10) {
+  $title= mb_substr($post->post_title,0,20) ;
+    echo $title . '...';
+  } else {
+    echo $post->post_title;
+  }
+?></h3>
                   </div>
                   <div class="campaign-card__info campaign-card__info--campaign">
                     <div class="campaign-card__text">全部コミコミ(お一人様)</div>
@@ -158,25 +172,30 @@
             <h2 class="sideber__header">アーカイブ</h2>
             <div class="sideber__time">
               <div class="sideber__date">
-                <?php
-                  $years = $wpdb->get_col("SELECT DISTINCT YEAR(post_date) FROM $wpdb->posts WHERE post_status = 'publish' ORDER BY post_date DESC");
-                  foreach($years as $year) :
-                  ?>
-                    <div class="sideber__year"><?php echo $year; ?></div>
-                    <ul class="sideber__month">
-                    <?php
-                    $months = $wpdb->get_col("SELECT DISTINCT MONTH(post_date) FROM $wpdb->posts WHERE post_status = 'publish' AND YEAR(post_date) = $year ORDER BY post_date DESC");
+              <?php
+$years = $wpdb->get_col("SELECT DISTINCT YEAR(post_date) FROM $wpdb->posts WHERE post_status = 'publish' ORDER BY post_date DESC");
+foreach($years as $year) :
+?>
+    <div class="sideber__year"><?php echo $year; ?></div>
+    <ul class="sideber__month">
+    <?php
+    $months = $wpdb->get_col("SELECT DISTINCT MONTH(post_date) FROM $wpdb->posts WHERE post_status = 'publish' AND YEAR(post_date) = $year ORDER BY post_date DESC");
 
-                    foreach($months as $month) :
-                        $dateObj   = DateTime::createFromFormat('!m', $month);
-                        $monthName = $dateObj->format('n'); // 12
-                        $post_count = count(get_posts("year=$year&monthnum=$month"));
-                        $link = get_month_link($year, $month);
-                    ?>
-                        <li><a href="<?php echo $link; ?>"><?php echo $monthName; ?>月 (<?php echo $post_count; ?>)</a></li>
-                    <?php endforeach; ?>
-                    </ul>
-                <?php endforeach; ?>
+    foreach($months as $month) :
+        $dateObj   = DateTime::createFromFormat('!m', $month);
+        $monthName = $dateObj->format('n'); // 12
+        $post_count = count(get_posts(array(
+            'year' => $year,
+            'monthnum' => $month,
+            'numberposts' => -1
+        )));
+        $link = get_month_link($year, $month);
+    ?>
+        <li><a href="<?php echo $link; ?>"><?php echo $monthName; ?>月 (<?php echo $post_count; ?>)</a></li>
+    <?php endforeach; ?>
+    </ul>
+<?php endforeach; ?>
+
               </div>
             </div>
           </div>
